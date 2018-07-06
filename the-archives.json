@@ -1,8 +1,11 @@
 {
     "id": "the-archives",
     "name": "The Archives",
-    "address": "191 College Street",
-    "phone-number": "(802) 448-4333",
+    "street": "191+College+Street",
+    "city": "burlington",
+    "state": "VT",
+    "country": "usa",
+    "phonenumber": "(802) 448-4333",
     "email": "thearchivesbar@gmail.com",
     "website": "www.thearchivesbar.com",
     "hours": " Monday to Friday 1600 - 0200 Saturday and Sunday 1200 - 0200",
