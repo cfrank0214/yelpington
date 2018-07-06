@@ -12,6 +12,7 @@ let restaurantNotes = document.getElementById('notes');
 let map = document.getElementById('map');
 let openStreetMapURL;
 let openStreetPinURL;
+let restaurantNames = [];
 
 function getYelpingtonData(name) {
     fetch(name + '.json')
@@ -45,13 +46,12 @@ function createMapRequestURL(restaurantInfo) {
     baseMapURL = "https://nominatim.openstreetmap.org/search/?q=";
     formatJson = '&format=json'
     mapRequestURL = `${baseMapURL}${restaurantInfo.street}+${restaurantInfo.city}+${restaurantInfo.state}+${restaurantInfo.country}${formatJson}`
-    console.log(mapRequestURL)
     return mapRequestURL
 
 }
 
 function makeAPICall(RequestURL) {
-    console.log({ RequestURL })
+
     fetch(RequestURL)
         .then(function (result) {
             return result.json()
@@ -64,10 +64,7 @@ function makeAPICall(RequestURL) {
           
              let iFrame = document.getElementById('MapIframe')
              iFrame.src=openStreetMapURL
-            console.log(openStreetMapURL)
-            console.log(openStreetPinURL)
-    
-            map.textContent = JSON.stringify(theResult[0])
+           
         })
 }
 
