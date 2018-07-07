@@ -17,6 +17,8 @@
   },
   "homepage": "https://github.com/BurlingtonCodeAcademy/yelpington#readme",
   "dependencies": {
+    "file-system": "^2.2.2",
+    "fs-filesystem": "^2.1.1",
     "mime-types": "^2.1.18"
   }
 }

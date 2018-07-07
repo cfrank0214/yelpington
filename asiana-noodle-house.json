@@ -1,7 +1,10 @@
 {
 "id": "asiana-noodle-house",
 "name": "Asiana Noodle House 🍜",
-"address": "88 Church St. Burlington, VT 05401",
+"street": "88 Church Steet",
+"city": "burlington",
+"state": "VT",
+"country": "usa",
 "phone number": "802-862-8828",
 "hours": "11:30am - 11:00pm",
 "notes": [

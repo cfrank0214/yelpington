@@ -1,5 +1,8 @@
 {
   "id": "alhi-babas-kabob-shop",
-  "address": "163 Main street",
+  "street": "163 Main street",
+  "city": "burlington",
+  "state": "VT",
+  "country": "usa",
   "phone-number": "(802)-862-5752"
 }
