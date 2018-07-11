@@ -8,8 +8,8 @@ let restaurantEmail;
 let restaurantWebSite;
 let restaurantHours;
 let restaurantNotes;
-let listDiv;
-let restaurantDetailsDiv;
+
+
 let map;
 let openStreetMapURL;
 
@@ -24,9 +24,7 @@ function initialize() {
     restaurantWebSite = document.getElementById('website');
     restaurantHours = document.getElementById('hours');
     restaurantNotes = document.getElementById('notes');
-    listDiv = document.getElementById('restaurantList');
-    restaurantDetailsDiv = document.getElementById('restaurantDetails');
-    restaurantDetailsDiv.setAttribute("style", "visibility: hidden;")
+
     map = L.map('mapid').setView([44.4758492, -73.2137881], 15);
 
     L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
@@ -39,49 +37,45 @@ function initialize() {
     L.marker([44.4758492, -73.2137881]).addTo(map)
         .bindPopup('Downtown Burlington')
         .openPopup();
-        fetchAllAndPopulateList();
+    fetchAllAndPopulateNavbar();
 }
 
-function fetchAllAndPopulateList() {
+
+function fetchAllAndPopulateNavbar() {
     fetch('all.json')
-        .then(function (response) {
-            return response.text();
+        .then(function (restaurantList) {
+            return restaurantList.json();
         })
-        .then(function (myText) {
-            allList = JSON.parse(myText)
-            for (i = 0; i < allList.length; i++) {
-                fetch(allList[i] + '.json')
-                    .then(function (response) {
-                        return response.text();
-                    })
-                    .then(function (restaurantData) {
-
-                        restaurantJson = JSON.parse(restaurantData)
-
-                        function populateList(divName, jsonListNumberID, jsonListNumberNames) {
-                            // document.getElementById(divName).innerHTML += "<a href=/" + jsonListNumberID + "><div class='navList'>" + jsonListNumberNames + "</div></a>"
-                            let htmlString = "<div onclick= " + "getRestaurantDetailsFromJSON(" + "'" + jsonListNumberID + "'" + ")>" + jsonListNumberID + "</div >"
-                            listDiv.innerHTML += htmlString
-                        }
-
-                        populateList("restaurantList", restaurantJson.id, restaurantJson.name)
-                        getRestaurantDetailsFromJSON(restaurantJson.id)
-                    })
-            }
+        .then(function (restaurantList) {
+            populateNavbar(restaurantList)
         })
 }
 
-function getRestaurantDetailsFromJSON(restaurantName) {
-    
-    fetch(restaurantName + '.json')
+function populateNavbar(restaurantList) {
+
+    for (restID of restaurantList) {
+        let currentRestID = restID;
+        $('<a id="' + restID + '" class="dropdown-item" href="#">' + restID + '</a>').appendTo('#dynamicRestList');
+        let restaurantLink = document.getElementById(restID)
+        
+        restaurantLink.addEventListener('click', () => {
+            getRestaurantDetailsFromJSON(currentRestID)
+            
+        })
+    }
+
+}
+
+function getRestaurantDetailsFromJSON(restaurantID) {
+
+    fetch(restaurantID + '.json')
         .then(function (response) {
             return response.json();
         })
-        .then(function (RestaurantDetails) {
-            
-            displayRestaurantDetails(RestaurantDetails)
-            let RestaurantLocation = getRestaurantLocation(RestaurantDetails)
-            displayMap(RestaurantLocation, RestaurantDetails)
+        .then(function (restData) {
+        
+            displayRestaurantDetails(restData)
+            return restData;
         })
         .catch(function (error) {
             console.error('Yikes! I should handle this better:\n', error);
@@ -98,15 +92,15 @@ function displayRestaurantDetails(restaurantInfo) {
     restaurantWebSite.textContent = restaurantInfo.website;
     restaurantHours.textContent = restaurantInfo.hours;
     restaurantNotes.textContent = restaurantInfo.notes;
-    restaurantDetailsDiv.setAttribute("style", "visibility: visible;")
-    return restaurantInfo
+    getRestaurantLocation(restaurantInfo)
 }
 
 function getRestaurantLocation(restaurantInfo) {
     baseMapURL = "https://nominatim.openstreetmap.org/search/?q=";
     formatJson = '&format=json'
     mapRequestURL = `${baseMapURL}${restaurantInfo.street}+${restaurantInfo.city}+${restaurantInfo.state}+${restaurantInfo.country}${formatJson}`
-    return mapRequestURL
+    displayMap(mapRequestURL, restaurantInfo)
+
 }
 
 function displayMap(restaurantLoc, restaurantDetails) {
