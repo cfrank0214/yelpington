@@ -19,6 +19,6 @@
   "dependencies": {
     "file-system": "^2.2.2",
     "fs-filesystem": "^2.1.2",
-    "mime-types": "^2.1.24"
+    "mime-types": "^2.1.25"
   }
 }
